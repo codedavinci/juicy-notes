@@ -19,9 +19,9 @@ The rule is very simple, I write a code example and then "idiotically" I'll say 
 - [Const declaration](#const-declaration)
 - [ShortHand properties](#shorthand-properties)
 - [Object enhancement](#object-enhancement)
-- [Spread operators](#spread-operator)
+- [Spread operators](#spread-operators)
 - [String templates](#string-templates)
-- [Destructuring assingment](#destructuring-assignement)
+- [Destructuring assignment](#destructuring-assignment)
 - [Import and Export](#import-and-export)
 - [Arrays Conversion](#array-conversion)
 - [Promises](#promises)
@@ -208,7 +208,7 @@ let apply = (done = () = console.log("done!")) => done(); //done!
 **Why:** Sometimes, there are cases that we want to return something to the client, even though it has receveid nothing 😎😎
 
 
-## Const Declarations
+## Const Declaration
 
 ```js
 //ES5 Standards for constants
