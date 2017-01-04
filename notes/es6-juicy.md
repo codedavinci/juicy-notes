@@ -17,9 +17,15 @@ The rule is very simple, I write a code example and then "idiotically" I'll say 
 - [Paramenters](#parameters)
    * [Default Arguments](#default-arguments)
 - [Const declaration](#const-declaration)
-- [Short-Hand properties](#short-hand-properties)
+- [ShortHand properties](#shorthand-properties)
 - [Object enhancement](#object-enhancement)
 - [Spread operators](#spread-operator)
+- [String templates](#string-templates)
+- [Destructuring assingment](#destructuring-assignement)
+- [Import and Export](#import-and-export)
+- [Arrays Conversion](#array-conversion)
+- [Promises](#promises)
+- [Generators](#generators)
 
 
 ## Arrow Functions
@@ -237,7 +243,7 @@ console.log(OBJ); //Error, OBJ is read-only and can't be reassigned.
 
 **Why:** Because as said earlier, we want to proctect our variables against being overwritten /changed 💪 💪
 
-## Short-Hand Properties
+## ShortHand Properties
 ```js
 let firstName = "Eddie";
 let lastName = "Henrique";
@@ -317,7 +323,7 @@ console.log(...array); // 1 2 3 4 5 6 7 8 9 10 (Just the values of the array)
 
 let measuraments = [4, 2, 5];
 function getVolumeRetangularPrism(length, width, height){
-    let result =  length * width * height
+    let result =  length * width * height;
     console.log(result);
 }
 getVolumeRetangularPrism(...measuraments); //40 
@@ -330,6 +336,212 @@ getVolumeRetangularPrism(...measuraments); //40
 
 **Why:** I wouldn't want to complicate this process  😂 😂
 
+## String Templates
+```js
+//Simple string building
+var k3 = "I love you <3";
+var lovemessage = ` I just wanna say ${k3}`; //PS: It takes all space you define, even paragraphs.
+console.log(lovemessage); //I Just wanna say I love you <3
+
+//Doing Expressions
+var x = 4;
+var area = `the area is ${ x * x }`;
+console.log(area);
+
+//Executing function with String Templates.
+var date = new Date;
+function check(strings, ...values){ //all strings are casted into array strings, and all values are spread into values array.
+    if( values[0] < 9){
+      values[2] = "I am getting ready to go to work";
+    }else if( values[0] > 17 && values[1] > 30){
+     values[2] = ",I am already off work";
+    }else{
+    values[2] = "and I am still working. :)";
+    }
+    return `${strings[0]}${values[0]}:${values[1]}${strings[1]} ${values[2]}`
+}
+
+var workerstatus = check`It's ${date.getHours()}${date.getMinutes()}${""}`
+console.log(workerstatus);
+```
+
+**What it is:** This is a very powerful feature that allows us build our own string using logic, operations and even run functions to determine its content. 🤓 🤓 
+
+**When to apply it:** Whenever you come up with a requirement where you need to display a string wiith some values of variables or properties. PS: We can also use *Regex* (Regular expressions into it). 🤑 🤑
+
+**Why:**  Because, It's extremly powerful, specially in some cases where you need some live update on the client side, without send a request back to the server 👌 👌
+
+## Destructuring Assignment
+```js
+//ES5 - Log out a property of an object
+var obj = { type: "A" }
+console.log(obj.type); //"A"
+
+//ES6 - Log out a property with Destructuring Assignement (One property)
+var { type } = { type: "Class A"}
+console.log(type) //"Class A"
+
+// Multiple properties
+var { type, color } = { type : "Class A", owner : "Frank Martinez", color : "blue" make : "Honda" }
+console.log(type, color); //Class A  blue
+
+// Destructuring an Array
+var [first,,,,last] = [1, 2, 3, 4, 5]; //Note that because there are empty spaces in between the comas the other values are innacessible.
+console.log(first, last) //1 5
+
+//Getting just the "Make" from an array  of cars with "Destructuring Assignment, and Arrow Functions (Callback)
+var cars = [
+    {
+        type: "Classe A",
+        color: "green",
+        make: "Honda"
+    },
+    {
+        type: "Classe B",
+        color: "blue",
+        make: "Mercedes"
+    },
+    {
+        type: "Classe D",
+        color: "yellow",
+        make: "Subaru"
+    },
+    {
+        type: "Classe F",
+        color: "white",
+        make: "Volvo"
+    }
+]
+cars.forEach(({make}) => console.log(make)); // "Honda" "Mercedes" "Subaru" "Volvo". It literally checks if there's any property in the object with the same "Make" and make it available externally.
+
+
+//Abstract Function receiving Destructured Parameters.
+var [, Mercedes] = cars; 
+
+function getColor({color}){ //I am passing the Destructured field  I want from the distructure object tha i'm gonna be passing.
+    console.log(color);
+}
+getColor(Mercedes); //blue
+```
+
+**What it is:** This is a very simplified way to manipulate the values of  properties of objects, if you know what I mean.. 🤓 🤓 
+
+**When to apply it:** Whenever you feel like manipulating the object and its proerty. 🤤 🤤
+
+**Why:**  Because abstraction is the key !! 🔑 🔑
+
+## Import and Export
+```js
+//main.js 
+import { getSquareArea,
+        getVolumeRetangularPrism
+        }  from  ' math/formulas ';
+
+//math/formulas.js (First way)
+function getSquareArea( x, y ){  return x  * y }
+function getVolumeRetangularPrism(length, width, height){
+    return  length * width * height;
+}
+export { getSquareArea, getVolumeRetangularPrism };
+
+//Second way (Exporting the function right on the signature. Both ways will be importerd the same way.)
+export function getSquareArea( x, y ){  return x  * y }
+export function getVolumeRetangularPrism(length, width, height){
+    return  length * width * height;
+}
+
+//Import with aliases 
+    import { getSquareArea as getArea,
+            getVolumeRetangularPrism as getVolume
+        }  from  ' math/formulas ';
+        
+        
+//Import everything from the file
+import * as formulas from ' math/formulas ';
+
+//Import some data the same way. (data/cars.js)
+export var cars = [
+    { type: "Classe A", color: "green", make: "Honda" },
+    { type: "Classe B", color: "blue", make: "Mercedes"}
+    ];
+
+//Importing this data/cars.js 
+import { cars } from 'data/cars';
+console.log(cars.filter(({color}) => color == "blue")); //{ type: "Classe B", color: "blue", make: "Mercedes"}
+```
+
+## Array Conversion
+
+#### NodeList to Array
+```js
+const cars = Array.from(document.querySelectorAll('.car')); // considering the class that's being passed is car. 
+
+```
+
+**What it is:** `Array.from` is the most effective way to convert  lists that come from the server side (usually defined as a `NodeList`). 
+*PS: Note tha `Array.from` is a new feauture that allows us to do this convertion **natively**.*  🙏🙏
+
+**When to apply it:** Whenever you need to do some changes values of any list and you don't have access to the server side code. 
+
+**Why:** Because the type `NodeList` **does not**  have all typical methods such as `Array.filter`, `Array.forEach`, `Array.reduce` and etc..  Simple as that 😑 😑
+
+## Promises
+```js
+//ES6 Common Standards 
+ var p = new Promise((resolve, reject) => {
+    if(true){
+        resolve("It was resolved");
+    }else{
+        reject("It was rejected");
+    }
+ });
+ 
+ p.then((data) => console.log("success: ", data)); //success: It was resolved
+ p.catch((error) => console.log("error :", error));
+ 
+//Passing p.catch as a callback nested in p.then 
+p.then((data) => console.log("success :", data), p.catch((error) => {
+    console.log("Error: ", error);
+});
+
+//Chaining multiples "then's 
+p.then((data) =>  {
+    console.log("success: ", data);
+    return data //Note that we need to explictly return the data, in order to be accessed by the second "then" 
+}). 
+then(data => console.log("accomplised: ", data)); 
+p.catch((error) => console.log("error :", error));
+// 
+```
+**What it is:** It's a feature that allows us execute some layerd process, based on `resolve` and `reject`. 
+
+**When to apply it:** When yu have some layerd process and need to test out applying some logic into it. 
+
+**Why:** Because gives you function structure to deal with logic and cases in multiple blocks. Better than you `try` `catch`. Also it is standand across develop teams. 
+
+## Generators 
+```js
+// Generators are not *Functions*
+function* sayIt(){ /
+    console.log('Saying hello !');
+    yield "Execute this now"
+}
+let speak = sayIt();
+console.log(speak); //{ next: [Function], throw: [Function }
+let next = speak.next();
+console.log(next); //{ value: "Execute this now", done: false }
+console.log(next);// {value: undefined, done: true }
+```
+
+**What it is:** Generators are **Iterators Functions** that process it's statements based on `yield`.  That means that each time we run `next()` it will check the last `yield` assignement and then execute it. 
+
+**When to apply it:** Whevever there's a situation you need to create a store and make it publicly available, like when it's applied on `redux` for instance.
+
+**Why:** Because it's a great way to invoke an execution of a method manually.
+
+
+
+ 
 
 
 
